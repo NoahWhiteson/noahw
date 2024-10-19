@@ -2,11 +2,13 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import './App.css';
 import logo from './p.png';
 import profilePic from './about.png';
-import { FaGithub, FaTwitter, FaDiscord, FaSun, FaMoon, FaHtml5, FaCss3Alt, FaJs, FaReact, FaNodeJs, FaPython, FaGitAlt, FaDocker } from 'react-icons/fa';
+import { FaGithub, FaTwitter, FaDiscord, FaSun, FaMoon, FaHtml5, FaCss3Alt, FaJs, FaReact, FaNodeJs, FaPython, FaGitAlt, FaDocker, FaEnvelope } from 'react-icons/fa';
 import { SiTypescript, SiNextdotjs, SiExpress, SiDjango, SiMysql, SiAmazon, SiGraphql, SiVuedotjs } from 'react-icons/si';
-import { Link, Element } from 'react-scroll';
+import { Link, Element, LinkProps } from 'react-scroll';
 import Carousel from 'react-spring-3d-carousel';
 import { config, useSpring, animated } from '@react-spring/web';
+import { BentoGrid, BentoGridItem } from './components/BentoGrid';
+import ReactConfetti from 'react-confetti';
 
 // Define the Particle interface
 interface Particle {
@@ -42,6 +44,7 @@ function App() {
   const [particles, setParticles] = useState<Particle[]>([]);
   const [trail, setTrail] = useState<TrailPoint[]>([]);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [showConfetti, setShowConfetti] = useState(false);
 
   const skills = [
     { name: 'HTML', icon: <FaHtml5 /> },
@@ -251,6 +254,44 @@ function App() {
     }
   ];
 
+  const projects = [
+    {
+      title: "E-commerce Platform",
+      description: "A full-stack e-commerce solution with React, Node.js, and MongoDB.",
+      className: "md:col-span-2",
+      thumbnail: "path/to/ecommerce-thumbnail.jpg",
+    },
+    {
+      title: "Weather App",
+      description: "Real-time weather forecasting app using OpenWeatherMap API.",
+      thumbnail: "path/to/weather-thumbnail.jpg",
+    },
+    {
+      title: "Task Manager",
+      description: "A productivity app built with React and Firebase.",
+      thumbnail: "path/to/taskmanager-thumbnail.jpg",
+    },
+    {
+      title: "Portfolio Website",
+      description: "A responsive portfolio website showcasing my projects and skills.",
+      className: "md:col-span-2",
+      thumbnail: "path/to/portfolio-thumbnail.jpg",
+    },
+    {
+      title: "Chat Application",
+      description: "Real-time chat app using Socket.io and Express.",
+      thumbnail: "path/to/chat-thumbnail.jpg",
+    },
+  ];
+
+  const handleContactClick = useCallback(() => {
+    setShowConfetti(true);
+    setTimeout(() => {
+      setShowConfetti(false);
+      window.location.href = 'mailto:noahwhiteson5@gmail.com';
+    }, 3000);
+  }, []);
+
   return (
     <div className={`App ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
       <div 
@@ -352,9 +393,40 @@ function App() {
             </div>
           </div>
         </Element>
+        <Element name="projects" className="section projects">
+          <h2>Projects</h2>
+          <BentoGrid className="max-w-4xl mx-auto">
+            {projects.map((project, index) => (
+              <BentoGridItem
+                key={index}
+                title={project.title}
+                description={project.description}
+                className={project.className}
+                thumbnail={project.thumbnail}
+              />
+            ))}
+          </BentoGrid>
+        </Element>
         <Element name="contact" className="section contact">
-          <h2>Contact</h2>
-          <p>Add your contact information here...</p>
+          <h2>Get in Touch</h2>
+          <Link 
+            to="contact" 
+            smooth={true} 
+            duration={500} 
+            className="contact-button"
+            onClick={handleContactClick}
+          >
+            <FaEnvelope className="contact-button-icon" />
+            Contact Me
+          </Link>
+          {showConfetti && (
+            <ReactConfetti
+              width={window.innerWidth}
+              height={window.innerHeight}
+              recycle={false}
+              numberOfPieces={200}
+            />
+          )}
         </Element>
       </div>
     </div>

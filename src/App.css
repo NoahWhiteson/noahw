@@ -728,100 +728,144 @@ h2 {
 /* ... (keep the other styles) */
 
 /* Projects Section Styles */
-.projects-grid {
+.projects {
+  padding: 4rem 0;
+  width: 100%;
+  overflow: hidden; /* Prevent any content from spilling out */
+}
+
+.projects h2 {
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  text-align: center;
+  color: white;
+}
+
+/* Bento Grid Styles */
+.bento-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
-  padding: 2rem;
-  max-width: 1200px;
-  margin: 0 auto;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  padding: 1.5rem;
+  max-width: 1200px; /* Limit the maximum width */
+  margin: 0 auto; /* Center the grid */
 }
 
-.project-card {
+.bento-grid-item {
   background-color: rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
-  overflow: hidden;
+  border-radius: 1rem;
+  padding: 1.5rem;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  display: flex;
-  flex-direction: column;
+  position: relative; /* Ensure icon positioning works correctly */
 }
 
-.project-card:hover {
+.bento-grid-item:hover {
   transform: translateY(-5px);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
-.project-thumbnail {
-  height: 200px;
-  background-size: cover;
-  background-position: center;
-}
-
-.project-content {
-  padding: 1.5rem;
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-}
-
-.project-icon {
-  font-size: 2rem;
-  margin-bottom: 0.5rem;
-}
-
-.project-content h3 {
+.bento-grid-item-icon {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
   font-size: 1.5rem;
+}
+
+.bento-grid-item-title {
+  font-size: 1.25rem;
+  font-weight: bold;
   margin-bottom: 0.5rem;
 }
 
-.project-content p {
-  font-size: 1rem;
-  margin-bottom: 1rem;
-  flex-grow: 1;
-}
-
-.project-links {
-  display: flex;
-  justify-content: flex-end;
-}
-
-.live-view-btn {
-  display: inline-flex;
-  align-items: center;
-  background-color: #4CAF50;
-  color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 5px;
-  text-decoration: none;
-  transition: background-color 0.3s ease;
-}
-
-.live-view-btn:hover {
-  background-color: #45a049;
-}
-
-.live-view-btn svg {
-  margin-right: 0.5rem;
+.bento-grid-item-description {
+  font-size: 0.9rem;
+  opacity: 0.8;
 }
 
 /* Light mode styles for projects */
-.light-mode .project-card {
+.light-mode .bento-grid-item {
   background-color: rgba(0, 0, 0, 0.05);
-}
-
-.light-mode .live-view-btn {
-  background-color: #2196F3;
-}
-
-.light-mode .live-view-btn:hover {
-  background-color: #1e88e5;
 }
 
 /* Responsive design for projects */
 @media (max-width: 768px) {
-  .projects-grid {
+  .bento-grid {
     grid-template-columns: 1fr;
   }
 }
 
 /* ... (keep other existing styles) */
+
+/* Contact Section Styles */
+.contact {
+  padding: 4rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 1; /* Ensure the contact section is above the grid background */
+}
+
+.contact h2 {
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  text-align: center;
+  color: white;
+}
+
+.contact-button {
+  display: inline-flex;
+  align-items: center;
+  background: none;
+  border: none;
+  color: white;
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  cursor: pointer;
+  transition: color 0.3s ease, transform 0.3s ease;
+  padding: 5px 10px;
+  position: relative;
+  overflow: hidden;
+  text-decoration: none;
+}
+
+.contact-button::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: white;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+}
+
+.contact-button:hover::after {
+  transform: translateX(0);
+}
+
+.contact-button:hover {
+  color: #ffffff;
+  transform: translateY(-2px);
+}
+
+.contact-button-icon {
+  margin-right: 5px;
+}
+
+/* Light mode styles for contact button */
+.light-mode .contact-button {
+  color: #333;
+}
+
+.light-mode .contact-button::after {
+  background-color: #333;
+}
+
+.light-mode .contact-button:hover {
+  color: #000000;
+}
+
+/* ... (other styles remain the same) */
