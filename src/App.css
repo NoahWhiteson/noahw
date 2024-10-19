@@ -1,38 +1,827 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@900&display=swap');
+
+/* Update these styles at the top of the file */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
 .App {
   text-align: center;
+  width: 100%;
+  min-height: 100vh;
+  background-color: black;
+  color: white;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 900;
+  position: relative;
+  overflow-y: auto;
 }
 
-.App-logo {
-  height: 40vmin;
+.grid-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 0;
+  background-image: 
+    radial-gradient(
+      circle at var(--mouse-x) var(--mouse-y),
+      rgba(255, 255, 255, 0.05) 0%,
+      transparent 8%
+    ),
+    radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+  background-size: 100% 100%, 20px 20px;
+  background-position: center, 0 0;
   pointer-events: none;
+  transition: background 0.2s ease;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+  z-index: 1000;
+}
+
+.loading-bar {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  background-color: white;
+  transition: transform 1.5s ease-in-out;
+}
+
+.loading-bar.top {
+  top: 0;
+  transform-origin: bottom;
+}
+
+.loading-bar.bottom {
+  bottom: 0;
+  transform-origin: top;
+}
+
+.loading-overlay.complete .loading-bar.top {
+  transform: translateY(-100%);
+}
+
+.loading-overlay.complete .loading-bar.bottom {
+  transform: translateY(100%);
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  padding-top: 80px; /* Add some padding to account for the fixed top bar */
+}
+
+.loading-overlay.complete + .content {
+  opacity: 1;
+}
+
+.section {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem 0;
+  position: relative;
+}
+
+.home {
+  padding-top: 100px;
+}
+
+.about {
+  /* Remove the background-color and backdrop-filter */
+  /* background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px); */
+}
+
+/* Add this new style for a semi-transparent overlay */
+.section-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: -1;
+}
+
+h1 {
+  font-size: 4rem;
+  margin-bottom: 0.5rem;
+  line-height: 1.2;
+  word-break: break-word;
+}
+
+.gradient-text {
+  background: linear-gradient(to bottom, #ffffff, #a0a0a0);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  display: inline-block;
+  font-style: italic;
+}
+
+.role {
+  font-size: 2rem;
+  margin-top: 0;
+  min-height: 2.4rem;
+}
+
+.cursor {
+  display: inline-block;
+  width: 2px;
+  animation: blink 0.7s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+h2 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 768px) {
+  h1 { font-size: 3rem; }
+  .role { font-size: 1.5rem; }
+}
+
+@media (max-width: 480px) {
+  h1 { font-size: 2.5rem; }
+  .role { font-size: 1.25rem; }
+}
+
+.top-bar {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 50px;
+  width: 80%;
+  max-width: 1000px;
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  z-index: 1001;
+  opacity: 0.5;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.top-bar:hover {
+  opacity: 0.8;
+}
+
+.top-bar.hidden {
+  transform: translate(-50%, -130%);
+}
+
+.logo {
+  height: 45px;
+  width: auto;
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.top-bar nav {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  flex-grow: 1;
+}
+
+.top-bar a {
+  background: none;
+  border: none;
+  color: white;
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  cursor: pointer;
+  transition: color 0.3s ease;
+  padding: 5px 10px;
+  position: relative;
+  overflow: hidden;
+  text-decoration: none;
+}
+
+.top-bar a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: white;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+}
+
+.top-bar a:hover::after {
+  transform: translateX(0);
+}
+
+.top-bar a:hover {
+  color: #ffffff;
+}
+
+.side-bar {
+  position: fixed;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 25px;
+  padding: 15px 10px;
+  z-index: 1001;
+  opacity: 0.5;
+  transition: opacity 0.3s ease;
+}
+
+.side-bar:hover {
+  opacity: 0.8;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.side-bar a {
+  color: white;
+  font-size: 24px;
+  transition: color 0.3s ease, transform 0.3s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.side-bar a:hover {
+  color: #a0a0a0;
+  transform: scale(1.1);
+}
+
+/* Custom text selection styles */
+::selection {
+  background-color: white;
+  color: black;
+}
+
+::-moz-selection {
+  background-color: white;
+  color: black;
+}
+
+/* Specific styles for the gradient text */
+.gradient-text::selection {
+  background-color: white;
+  -webkit-text-fill-color: black;
+}
+
+.gradient-text::-moz-selection {
+  background-color: white;
+  -webkit-text-fill-color: black;
+}
+
+/* Add a style for the scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* Light mode styles */
+.light-mode {
+  background-color: white;
+  color: black;
+}
+
+.light-mode .grid-background {
+  background-image: 
+    radial-gradient(
+      circle at var(--mouse-x) var(--mouse-y),
+      rgba(0, 0, 0, 0.05) 0%,
+      transparent 8%
+    ),
+    radial-gradient(rgba(0, 0, 0, 0.1) 1px, transparent 1px);
+}
+
+.light-mode .top-bar {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.light-mode .top-bar a,
+.light-mode .mode-toggle {
+  color: black;
+}
+
+.light-mode .top-bar a::after {
+  background-color: black;
+}
+
+.light-mode .side-bar {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.light-mode .side-bar a {
+  color: black;
+}
+
+.light-mode .gradient-text {
+  background: linear-gradient(to bottom, #000000, #606060);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.light-mode .section-overlay {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+/* Dark mode styles (default) */
+.dark-mode {
+  background-color: black;
+  color: white;
+}
+
+
+/* Mode toggle button styles */
+.mode-toggle {
+  background: none;
+  border: none;
+  color: inherit;
+  font-size: 20px;
+  cursor: pointer;
+  transition: color 0.3s ease, transform 0.3s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  margin: 0;
+  width: 40px;
+  height: 40px;
+}
+
+.mode-toggle:hover {
+  color: #a0a0a0;
+  transform: scale(1.1);
+}
+
+/* Update scrollbar styles for light mode */
+.light-mode ::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.light-mode ::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.light-mode ::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.animated-text {
+  display: inline-block;
+  position: relative;
+  font-size: 1.2rem;
+  line-height: 1.6;
+  max-width: 600px;
+  text-align: left;
+  margin: 0 auto;
+}
+
+.animated-text::after {
+  content: '|';
+  position: absolute;
+  right: -10px;
+  animation: blink 0.7s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.glitch-text {
+  position: relative;
+  font-size: 1.2rem;
+  line-height: 1.6;
+  text-align: left;
+  color: #fff;
+  text-shadow: 0.5px 0.5px 1px rgba(0, 0, 0, 0.3);
+}
+
+.glitch-text::before,
+.glitch-text::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.8;
+}
+
+.glitch-text::before {
+  left: 0.5px;
+  text-shadow: -0.5px 0 #ff00c1;
+  clip-path: var(--clip-one);
+  animation: glitch 6s infinite linear alternate-reverse;
+  transform: var(--transform-one);
+}
+
+.glitch-text::after {
+  left: -0.5px;
+  text-shadow: 0.5px 0 #00fff9;
+  clip-path: var(--clip-two);
+  animation: glitch 5s infinite linear alternate-reverse;
+  transform: var(--transform-two);
+}
+
+@keyframes glitch {
+  0% {
+    clip-path: var(--clip-one);
+    transform: var(--transform-one);
+  }
+  100% {
+    clip-path: var(--clip-three);
+    transform: var(--transform-three);
   }
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+/* Update light mode styles for the glitch text */
+.light-mode .glitch-text {
+  color: #000;
+}
+
+.light-mode .glitch-text::before {
+  text-shadow: -0.5px 0 #ff00c1;
+}
+
+.light-mode .glitch-text::after {
+  text-shadow: 0.5px 0 #00fff9;
+}
+
+/* Add responsive styles for smaller screens */
+@media (max-width: 768px) {
+  .about-content {
+    flex-direction: column;
+  }
+
+  .profile-pic {
+    margin-right: 0;
+    margin-bottom: 20px;
+    flex: 0 0 100%;
+  }
+
+  .about-text {
+    flex: 0 0 100%;
+  }
+}
+
+/* ... (keep other existing styles) */
+
+.about-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.profile-pic {
+  flex: 0 0 40%;
+  margin-right: 40px;
+}
+
+.profile-pic img {
+  width: 100%;
+  /* Remove these lines:
+  border-radius: 50%;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+  */
+}
+
+.about-text {
+  flex: 0 0 55%;
+}
+
+.glitch-text {
+  position: relative;
+  font-size: 1.2rem;
+  line-height: 1.6;
+  text-align: left;
+  color: #fff;
+}
+
+/* ... (keep the existing glitch-text styles) */
+
+/* Add responsive styles for smaller screens */
+@media (max-width: 768px) {
+  .about-content {
+    flex-direction: column;
+  }
+
+  .profile-pic {
+    margin-right: 0;
+    margin-bottom: 20px;
+    flex: 0 0 100%;
+  }
+
+  .about-text {
+    flex: 0 0 100%;
+  }
+}
+
+/* ... (keep other existing styles) */
+
+.carousel-container {
+  width: 100%;
+  height: 200px; /* Reduced height */
+  position: relative;
+  perspective: 1000px;
+  overflow: hidden;
+}
+
+.carousel-slide {
+  position: absolute;
+  width: 120px; /* Reduced width */
+  height: 120px; /* Reduced height */
+  will-change: transform, opacity;
+}
+
+.skill-item {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  width: 100%;
+  height: 100%;
+  background-color: transparent; /* Removed background */
+  border-radius: 0; /* Removed border-radius */
+  padding: 10px;
+  transition: transform 0.3s ease;
+}
+
+.skill-item:hover {
+  transform: scale(1.1);
+}
+
+.skill-item svg {
+  font-size: 48px; /* Increased icon size */
+  margin-bottom: 8px;
+  color: #4CAF50; /* Added color to icons */
+}
+
+.skill-item span {
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* Light mode styles */
+.light-mode .skill-item svg {
+  color: #2196F3; /* Different color for light mode */
+}
+
+/* ... (keep other styles) */
+
+.skills-content {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.skills-intro {
+  text-align: left;
+  margin-bottom: 2rem;
+}
+
+.skills-carousel {
+  margin-bottom: 3rem;
+}
+
+.skills-details {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.skill-category {
+  width: 30%;
+  margin-bottom: 2rem;
+}
+
+.skill-category h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  text-align: left;
+}
+
+.skill-item-detailed {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.skill-icon {
+  font-size: 1.5rem;
+  margin-right: 0.5rem;
+  width: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.skill-name {
+  width: 100px;
+  text-align: left;
+  margin-right: 1rem;
+}
+
+.skill-level-container {
+  display: flex;
+  gap: 4px;
+  flex-grow: 1;
+}
+
+.skill-level-indicator {
+  width: 20px;
+  height: 10px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 5px;
+}
+
+.skill-level-indicator.filled {
+  background-color: #4CAF50;
+}
+
+.skill-level-text {
+  width: 100px;
+  text-align: right;
+  margin-left: 1rem;
+  font-size: 0.9rem;
+}
+
+/* Light mode styles for skills section */
+.light-mode .skill-level-indicator {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.light-mode .skill-level-indicator.filled {
+  background-color: #2196F3;
+}
+
+/* Responsive design for skills section */
+@media (max-width: 768px) {
+  .skill-category {
+    width: 100%;
+  }
+}
+
+/* Light mode styles for skills section */
+.light-mode .skill-bar-container {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.light-mode .skill-bar {
+  background-color: #2196F3;
+}
+
+/* ... (keep the other styles) */
+
+/* Projects Section Styles */
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.project-card {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.project-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.project-thumbnail {
+  height: 200px;
+  background-size: cover;
+  background-position: center;
+}
+
+.project-content {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.project-icon {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.project-content h3 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.project-content p {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  flex-grow: 1;
+}
+
+.project-links {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.live-view-btn {
+  display: inline-flex;
+  align-items: center;
+  background-color: #4CAF50;
   color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
 }
 
-.App-link {
-  color: #61dafb;
+.live-view-btn:hover {
+  background-color: #45a049;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
+.live-view-btn svg {
+  margin-right: 0.5rem;
+}
+
+/* Light mode styles for projects */
+.light-mode .project-card {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.light-mode .live-view-btn {
+  background-color: #2196F3;
+}
+
+.light-mode .live-view-btn:hover {
+  background-color: #1e88e5;
+}
+
+/* Responsive design for projects */
+@media (max-width: 768px) {
+  .projects-grid {
+    grid-template-columns: 1fr;
   }
 }
+
+/* ... (keep other existing styles) */
