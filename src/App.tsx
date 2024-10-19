@@ -30,7 +30,7 @@ interface TrailPoint {
 function App() {
   const [animationComplete, setAnimationComplete] = useState(false);
   const [displayedText, setDisplayedText] = useState('');
-  const roles = ['Hi, I am a Frontend Developer', 'Hi, I am a Backend Developer'];
+  const roles = ['I am a Frontend Developer', 'I am a Backend Developer'];
   const [currentRoleIndex, setCurrentRoleIndex] = useState(0);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isDarkMode, setIsDarkMode] = useState(true);
@@ -198,7 +198,7 @@ function App() {
     setIsDarkMode(!isDarkMode);
   };
 
-  const aboutMeText = "I am a developer with experience in both frontend and backend technologies. I focus on creating user-friendly web applications that are responsive and efficient. On the frontend, I use HTML, CSS, and JavaScript frameworks to design intuitive interfaces. On the backend, I work with server-side languages and databases to manage data and application logic. I enjoy solving complex problems and delivering reliable solutions.";
+  const aboutMeText = "I am a 13 year old developer with experience in both frontend and backend technologies. I focus on creating user-friendly web applications that are responsive and efficient. On the frontend, I use HTML, CSS, and JavaScript frameworks to design intuitive interfaces. On the backend, I work with server-side languages and databases to manage data and application logic. I enjoy solving complex problems and delivering reliable solutions.";
 
   useEffect(() => {
     const glitchText = document.querySelector('.glitch-text') as HTMLElement;
