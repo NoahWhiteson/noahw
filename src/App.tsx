@@ -256,10 +256,10 @@ function App() {
 
   const projects = [
     {
-      title: "E-commerce Platform",
-      description: "A full-stack e-commerce solution with React, Node.js, and MongoDB.",
+      title: "Nutrition Fact App",
+      description: "A finished web applicaiton that uses a open food database api to retreive food information based on bar codes.",
       className: "md:col-span-2",
-      thumbnail: "path/to/ecommerce-thumbnail.jpg",
+      thumbnail: "nutrition.png",
     },
     {
       title: "Weather App",
