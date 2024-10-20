@@ -152,7 +152,7 @@ function App() {
             clearInterval(intervalId);
           }
         }
-      }, 100); // Adjust speed of typing/deleting here
+      }, 50); // Adjust speed of typing/deleting here
 
       return () => clearInterval(intervalId);
     }
